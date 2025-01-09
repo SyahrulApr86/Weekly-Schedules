@@ -1,6 +1,7 @@
+
 # Weekly Schedule Manager
 
-The Weekly Schedule Manager is a web-based application that allows users to efficiently organize their weekly schedules. This application is built using React and TypeScript, with Tailwind CSS for styling.
+The **Weekly Schedule Manager** is a web-based application that allows users to efficiently organize their weekly schedules. This application is built using **React** and **TypeScript**, with **Tailwind CSS** for styling and **Vite** as the build tool.
 
 ## Features
 
@@ -10,22 +11,45 @@ The Weekly Schedule Manager is a web-based application that allows users to effi
 
 ## Installation
 
+### Using Docker (Recommended)
+
 1. **Clone this repository**:
 
    ```bash
    git clone https://github.com/username/weekly-schedule-manager.git
    cd weekly-schedule-manager
    ```
+
+2. **Build and run the application using Docker Compose**:
+
+   ```bash
+   docker compose up --build
+   ```
+
+3. **Open in browser**:
+   Access the application at `http://localhost`.
+
+### Local Development
+
+1. **Clone this repository**:
+
+   ```bash
+   git clone https://github.com/username/weekly-schedule-manager.git
+   cd weekly-schedule-manager
+   ```
+
 2. **Install dependencies**:
 
    ```bash
    npm install
    ```
+
 3. **Run the application**:
 
    ```bash
-   npm start
+   npm run dev
    ```
+
 4. **Open in browser**:
    Access the application at `http://localhost:3000`.
 
@@ -37,6 +61,8 @@ The Weekly Schedule Manager is a web-based application that allows users to effi
   - `App.tsx`: Main application component.
   - `index.css`: CSS file using Tailwind CSS.
 - `public/`: Contains static files like `index.html`.
+- `Dockerfile`: Defines the steps to build the Docker image.
+- `docker-compose.yml`: Configuration for running the application using Docker Compose.
 
 ## Technologies Used
 
@@ -44,6 +70,8 @@ The Weekly Schedule Manager is a web-based application that allows users to effi
 - **TypeScript**: A superset of JavaScript that adds static types.
 - **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
 - **Vite**: A modern build tool for frontend development.
+- **Docker**: Containerization platform to build and run the application.
+- **Nginx**: Web server used to serve the production build of the application.
 
 ## Contribution
 
