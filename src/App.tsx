@@ -3,8 +3,10 @@ import { Calendar } from 'lucide-react';
 import { ScheduleForm } from './components/ScheduleForm';
 import { ScheduleDisplay } from './components/ScheduleDisplay';
 import { Auth } from './components/Auth';
+import { Navbar } from './components/Navbar';
 import { supabase } from './lib/supabase';
 import type { DaySchedule } from './types';
+import type { User } from '@supabase/supabase-js';
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -123,28 +125,19 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+      <Navbar user={session.user} onSignOut={handleSignOut} />
+      
       <div className="max-w-[1400px] mx-auto p-4 md:p-8 space-y-8">
-        <header className="bg-white rounded-2xl shadow-sm p-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="bg-blue-100 p-3 rounded-xl">
-                <Calendar className="w-8 h-8 text-blue-600" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">Weekly Schedule Manager</h1>
-                <p className="text-gray-500 mt-1">Organize your week efficiently</p>
-              </div>
-            </div>
-            <button
-              onClick={handleSignOut}
-              className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
-            >
-              Sign Out
-            </button>
-          </div>
-        </header>
-
         <div className="bg-white rounded-2xl shadow-sm p-6">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="bg-blue-100 p-3 rounded-xl">
+              <Calendar className="w-8 h-8 text-blue-600" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Welcome Back!</h2>
+              <p className="text-gray-500">Manage your weekly schedule below</p>
+            </div>
+          </div>
           <ScheduleForm onAddSchedule={handleAddSchedule} />
         </div>
         
