@@ -3,9 +3,10 @@
 @tailwind utilities;
 
 @layer base {
-  input[type="time"]::-webkit-calendar-picker-indicator {
-    background: none;
-    display: none;
+  /* Remove the style that hides the time picker */
+  input[type="time"] {
+    cursor: pointer;
+    padding-right: 30px !important; /* Space for the dropdown arrow */
   }
 }
 
