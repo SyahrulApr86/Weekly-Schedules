@@ -5,13 +5,13 @@ import { ScheduleDisplay } from './components/ScheduleDisplay';
 import { Auth } from './components/Auth';
 import { Navbar } from './components/Navbar';
 import { supabase } from './lib/supabase';
-import type { DaySchedule } from './types';
-import type { User } from '@supabase/supabase-js';
+import type { DaySchedule, ScheduleItem } from './types';
 
 export default function App() {
   const [session, setSession] = useState(null);
   const [schedule, setSchedule] = useState<DaySchedule>({});
   const [loading, setLoading] = useState(true);
+  const [editingSchedule, setEditingSchedule] = useState<ScheduleItem | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -59,6 +59,7 @@ export default function App() {
           endTime: item.end_time,
           activity: item.activity,
           color: item.color,
+          details: item.details,
         });
       });
 
@@ -75,7 +76,8 @@ export default function App() {
     startTime: string,
     endTime: string,
     activity: string,
-    color: string
+    color: string,
+    details: string
   ) => {
     try {
       const { data, error } = await supabase.from('schedules').insert([
@@ -85,6 +87,7 @@ export default function App() {
           end_time: endTime,
           activity,
           color,
+          details,
           user_id: session?.user?.id,
         },
       ]);
@@ -93,6 +96,36 @@ export default function App() {
       fetchSchedule();
     } catch (error) {
       console.error('Error adding schedule:', error);
+    }
+  };
+
+  const handleUpdateSchedule = async (
+    id: string,
+    day: string,
+    startTime: string,
+    endTime: string,
+    activity: string,
+    color: string,
+    details: string
+  ) => {
+    try {
+      const { error } = await supabase
+        .from('schedules')
+        .update({
+          day,
+          start_time: startTime,
+          end_time: endTime,
+          activity,
+          color,
+          details,
+        })
+        .eq('id', id);
+
+      if (error) throw error;
+      setEditingSchedule(null);
+      fetchSchedule();
+    } catch (error) {
+      console.error('Error updating schedule:', error);
     }
   };
 
@@ -134,11 +167,20 @@ export default function App() {
               <Calendar className="w-8 h-8 text-blue-600" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Welcome Back!</h2>
-              <p className="text-gray-500">Manage your weekly schedule below</p>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {editingSchedule ? 'Edit Schedule' : 'Welcome Back!'}
+              </h2>
+              <p className="text-gray-500">
+                {editingSchedule ? 'Update your schedule below' : 'Manage your weekly schedule below'}
+              </p>
             </div>
           </div>
-          <ScheduleForm onAddSchedule={handleAddSchedule} />
+          <ScheduleForm 
+            onAddSchedule={handleAddSchedule}
+            onUpdateSchedule={handleUpdateSchedule}
+            editingSchedule={editingSchedule}
+            onCancelEdit={() => setEditingSchedule(null)}
+          />
         </div>
         
         <div className="bg-white rounded-2xl shadow-sm p-6">
@@ -151,7 +193,8 @@ export default function App() {
           ) : (
             <ScheduleDisplay 
               schedule={schedule} 
-              onDeleteSchedule={handleDeleteSchedule} 
+              onDeleteSchedule={handleDeleteSchedule}
+              onEditSchedule={setEditingSchedule}
             />
           )}
         </div>

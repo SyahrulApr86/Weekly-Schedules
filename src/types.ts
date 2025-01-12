@@ -5,6 +5,7 @@ export interface ScheduleItem {
   endTime: string;
   activity: string;
   color: string;
+  details?: string;
 }
 
 export type DaySchedule = {

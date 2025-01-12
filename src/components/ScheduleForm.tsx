@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
-import { CalendarPlus, Clock, BookOpen } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { CalendarPlus, Clock, BookOpen, FileText, X } from 'lucide-react';
+import type { ScheduleItem } from '../types';
 
 interface ScheduleFormProps {
-  onAddSchedule: (day: string, startTime: string, endTime: string, activity: string, color: string) => void;
+  onAddSchedule: (day: string, startTime: string, endTime: string, activity: string, color: string, details: string) => void;
+  onUpdateSchedule: (id: string, day: string, startTime: string, endTime: string, activity: string, color: string, details: string) => void;
+  editingSchedule: ScheduleItem | null;
+  onCancelEdit: () => void;
 }
 
 const COLORS = [
@@ -15,12 +19,24 @@ const COLORS = [
   '#F3E5F5', // Light Pink
 ];
 
-export function ScheduleForm({ onAddSchedule }: ScheduleFormProps) {
+export function ScheduleForm({ onAddSchedule, onUpdateSchedule, editingSchedule, onCancelEdit }: ScheduleFormProps) {
   const [day, setDay] = useState('Monday');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [activity, setActivity] = useState('');
+  const [details, setDetails] = useState('');
   const [color, setColor] = useState(COLORS[0]);
+
+  useEffect(() => {
+    if (editingSchedule) {
+      setDay(editingSchedule.day);
+      setStartTime(editingSchedule.startTime);
+      setEndTime(editingSchedule.endTime);
+      setActivity(editingSchedule.activity);
+      setColor(editingSchedule.color);
+      setDetails(editingSchedule.details || '');
+    }
+  }, [editingSchedule]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,22 +45,35 @@ export function ScheduleForm({ onAddSchedule }: ScheduleFormProps) {
         alert('End time must be after start time');
         return;
       }
-      onAddSchedule(day, startTime, endTime, activity, color);
+
+      if (editingSchedule) {
+        onUpdateSchedule(editingSchedule.id, day, startTime, endTime, activity, color, details);
+      } else {
+        onAddSchedule(day, startTime, endTime, activity, color, details);
+      }
+
+      resetForm();
+    }
+  };
+
+  const resetForm = () => {
+    if (!editingSchedule) {
+      setDay('Monday');
       setStartTime('');
       setEndTime('');
       setActivity('');
+      setDetails('');
+      setColor(COLORS[0]);
     }
+  };
+
+  const handleCancel = () => {
+    resetForm();
+    onCancelEdit();
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="flex items-center gap-2 mb-6">
-        <div className="bg-blue-100 p-2 rounded-lg">
-          <CalendarPlus className="w-6 h-6 text-blue-600" />
-        </div>
-        <h2 className="text-xl font-semibold text-gray-800">Add New Schedule</h2>
-      </div>
-      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
@@ -106,6 +135,19 @@ export function ScheduleForm({ onAddSchedule }: ScheduleFormProps) {
         </div>
       </div>
 
+      <div className="space-y-2">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+          <FileText className="w-4 h-4" />
+          Details
+        </label>
+        <textarea
+          value={details}
+          onChange={(e) => setDetails(e.target.value)}
+          className="block w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-gray-700 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-colors resize-none h-24"
+          placeholder="Enter additional details (optional)"
+        />
+      </div>
+
       <div className="space-y-3">
         <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
           Color Theme
@@ -125,13 +167,25 @@ export function ScheduleForm({ onAddSchedule }: ScheduleFormProps) {
         </div>
       </div>
 
-      <button
-        type="submit"
-        className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium"
-      >
-        <CalendarPlus className="w-5 h-5" />
-        Add Schedule
-      </button>
+      <div className="flex gap-3">
+        <button
+          type="submit"
+          className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium"
+        >
+          <CalendarPlus className="w-5 h-5" />
+          {editingSchedule ? 'Update Schedule' : 'Add Schedule'}
+        </button>
+        {editingSchedule && (
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium flex items-center gap-2"
+          >
+            <X className="w-5 h-5" />
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 }
