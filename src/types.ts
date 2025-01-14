@@ -6,6 +6,14 @@ export interface ScheduleItem {
   activity: string;
   color: string;
   details?: string;
+  groupId: string;
+}
+
+export interface ScheduleGroup {
+  id: string;
+  name: string;
+  isDefault: boolean;
+  createdAt: string;
 }
 
 export type DaySchedule = {
