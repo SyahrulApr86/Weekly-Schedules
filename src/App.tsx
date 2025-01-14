@@ -184,10 +184,6 @@ export default function App() {
         </div>
         
         <div className="bg-white rounded-2xl shadow-sm p-6">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
-            <span>Weekly Timetable</span>
-            <span className="text-sm font-normal text-gray-500">(Scroll horizontally to view full schedule)</span>
-          </h2>
           {loading ? (
             <div className="text-center py-8 text-gray-500">Loading schedule...</div>
           ) : (

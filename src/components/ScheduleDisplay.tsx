@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Clock, Trash2, Calendar, FileText, Pencil } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Clock, Trash2, Calendar, FileText, Pencil, Download } from 'lucide-react';
 import { Modal } from './Modal';
 import type { DaySchedule, ScheduleItem } from '../types';
 
@@ -15,6 +15,7 @@ const timeSlots = Array.from({ length: 24 }, (_, i) =>
 
 export function ScheduleDisplay({ schedule, onDeleteSchedule, onEditSchedule }: ScheduleDisplayProps) {
   const [selectedEvent, setSelectedEvent] = useState<ScheduleItem | null>(null);
+  const scheduleRef = useRef<HTMLDivElement>(null);
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   const getTimeInMinutes = (time: string) => {
@@ -93,9 +94,44 @@ export function ScheduleDisplay({ schedule, onDeleteSchedule, onEditSchedule }: 
     onEditSchedule(event);
   };
 
+  const exportToImage = async () => {
+    if (!scheduleRef.current) return;
+
+    try {
+      const html2canvas = (await import('html2canvas')).default;
+      const canvas = await html2canvas(scheduleRef.current, {
+        scale: 2,
+        backgroundColor: '#ffffff',
+        logging: false,
+      });
+
+      // Create download link
+      const link = document.createElement('a');
+      link.download = 'weekly-schedule.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (error) {
+      console.error('Error exporting schedule:', error);
+    }
+  };
+
   return (
     <>
-      <div className="overflow-x-auto rounded-xl border border-gray-100">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+          <span>Weekly Timetable</span>
+          <span className="text-sm font-normal text-gray-500">(Scroll horizontally to view full schedule)</span>
+        </h2>
+        <button
+          onClick={exportToImage}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium"
+        >
+          <Download className="w-4 h-4" />
+          Export Schedule
+        </button>
+      </div>
+
+      <div ref={scheduleRef} className="overflow-x-auto rounded-xl border border-gray-100">
         <table className="w-full border-collapse bg-white">
           <thead>
             <tr>
