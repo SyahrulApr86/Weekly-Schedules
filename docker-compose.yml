@@ -1,5 +1,6 @@
 services:
   web:
+    container_name: wiiks-app
     build:
       context: .
       args:
