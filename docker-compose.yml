@@ -1,17 +1,11 @@
 services:
-  app:
-    container_name: wiiks-app
+  web:
     build:
       context: .
-      dockerfile: Dockerfile
+      args:
+        - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+        - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
     ports:
-      - "3002:80"
+      - "80:80"
     environment:
       - NODE_ENV=production
-    networks:
-      - traefik-network
-
-networks:
-  traefik-network:
-    name: traefik-network
-    driver: bridge
