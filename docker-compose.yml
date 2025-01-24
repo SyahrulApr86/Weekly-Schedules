@@ -7,3 +7,10 @@ services:
       - "80:80"
     environment:
       - NODE_ENV=production
+    networks:
+      - traefik-network
+
+networks:
+  traefik-network:
+    name: traefik-network
+    driver: bridge
