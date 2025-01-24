@@ -1,6 +1,6 @@
-# Weekly Schedule Manager
+# Wiiks a Weekly Schedule Manager
 
-The **Weekly Schedule Manager** is a web-based application that allows users to efficiently organize their weekly schedules. This application is built using **React** and **TypeScript**, with **Tailwind CSS** for styling and **Vite** as the build tool. It now integrates with **Supabase** for user authentication and database storage, allowing each user to manage their own schedules independently.
+**Wiiks** is a web-based application that allows users to efficiently organize their weekly schedules. This application is built using **React** and **TypeScript**, with **Tailwind CSS** for styling and **Vite** as the build tool. It now integrates with **Supabase** for user authentication and database storage, allowing each user to manage their own schedules independently.
 
 ## Features
 
