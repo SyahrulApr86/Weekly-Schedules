@@ -1,5 +1,6 @@
 services:
   app:
+    container_name: wiiks-app
     build:
       context: .
       dockerfile: Dockerfile
