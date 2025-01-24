@@ -71,7 +71,7 @@ jobs:
             docker stop wiiks-app || true
             docker rm wiiks-app || true
             docker run -d --name wiiks-app \
-              -p 80:80 \
+              -p 3002:80 \
               -e VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }} \
               -e VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }} \
               ${{ secrets.DOCKER_USERNAME }}/wiiks-app:latest
