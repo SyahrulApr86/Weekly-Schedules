@@ -7,6 +7,6 @@ services:
         - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
         - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
     ports:
-      - "80:80"
+      - "3002:80"
     environment:
       - NODE_ENV=production
