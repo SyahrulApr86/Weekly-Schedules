@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ScheduleForm } from './components/ScheduleForm';
 import { ScheduleDisplay } from './components/ScheduleDisplay';
 import { ScheduleGroupList } from './components/ScheduleGroupList';
@@ -50,9 +50,9 @@ function App() {
   const fetchGroups = async () => {
     try {
       const { data, error } = await supabase
-        .from('schedule_groups')
-        .select('*')
-        .order('created_at', { ascending: true });
+          .from('schedule_groups')
+          .select('*')
+          .order('created_at', { ascending: true });
 
       if (error) throw error;
 
@@ -70,10 +70,10 @@ function App() {
 
     try {
       const { data, error } = await supabase
-        .from('schedules')
-        .select('*')
-        .eq('group_id', selectedGroupId)
-        .order('start_time', { ascending: true });
+          .from('schedules')
+          .select('*')
+          .eq('group_id', selectedGroupId)
+          .order('start_time', { ascending: true });
 
       if (error) throw error;
 
@@ -101,32 +101,32 @@ function App() {
   };
 
   const onAddSchedule = async (
-    day: string,
-    startTime: string,
-    endTime: string,
-    activity: string,
-    color: string,
-    details: string
+      day: string,
+      startTime: string,
+      endTime: string,
+      activity: string,
+      color: string,
+      details: string
   ) => {
     if (!session?.user?.id || !selectedGroupId) return;
 
     try {
       const { data, error } = await supabase
-        .from('schedules')
-        .insert([
-          {
-            user_id: session.user.id,
-            group_id: selectedGroupId,
-            day,
-            start_time: startTime,
-            end_time: endTime,
-            activity,
-            color,
-            details,
-          },
-        ])
-        .select()
-        .single();
+          .from('schedules')
+          .insert([
+            {
+              user_id: session.user.id,
+              group_id: selectedGroupId,
+              day,
+              start_time: startTime,
+              end_time: endTime,
+              activity,
+              color,
+              details,
+            },
+          ])
+          .select()
+          .single();
 
       if (error) throw error;
 
@@ -152,35 +152,35 @@ function App() {
   };
 
   const onUpdateSchedule = async (
-    id: string,
-    day: string,
-    startTime: string,
-    endTime: string,
-    activity: string,
-    color: string,
-    details: string
+      id: string,
+      day: string,
+      startTime: string,
+      endTime: string,
+      activity: string,
+      color: string,
+      details: string
   ) => {
     if (!session?.user?.id) return;
 
     try {
       const { error } = await supabase
-        .from('schedules')
-        .update({
-          day,
-          start_time: startTime,
-          end_time: endTime,
-          activity,
-          color,
-          details,
-        })
-        .eq('id', id)
-        .eq('user_id', session.user.id);
+          .from('schedules')
+          .update({
+            day,
+            start_time: startTime,
+            end_time: endTime,
+            activity,
+            color,
+            details,
+          })
+          .eq('id', id)
+          .eq('user_id', session.user.id);
 
       if (error) throw error;
 
       // Update local state
       const newSchedule = { ...schedule };
-      
+
       // Remove from old day
       Object.keys(newSchedule).forEach((d) => {
         newSchedule[d] = newSchedule[d].filter((item) => item.id !== id);
@@ -217,10 +217,10 @@ function App() {
 
     try {
       const { error } = await supabase
-        .from('schedules')
-        .delete()
-        .eq('id', id)
-        .eq('user_id', session.user.id);
+          .from('schedules')
+          .delete()
+          .eq('id', id)
+          .eq('user_id', session.user.id);
 
       if (error) throw error;
 
@@ -240,24 +240,24 @@ function App() {
 
     try {
       const { data: newGroup, error } = await supabase
-        .from('schedule_groups')
-        .insert([
-          {
-            user_id: session.user.id,
-            name: newGroupName.trim(),
-          },
-        ])
-        .select()
-        .single();
+          .from('schedule_groups')
+          .insert([
+            {
+              user_id: session.user.id,
+              name: newGroupName.trim(),
+            },
+          ])
+          .select()
+          .single();
 
       if (error) throw error;
 
       if (copyFromGroupId) {
         // Copy schedules from selected group
         const { data: schedules, error: fetchError } = await supabase
-          .from('schedules')
-          .select('*')
-          .eq('group_id', copyFromGroupId);
+            .from('schedules')
+            .select('*')
+            .eq('group_id', copyFromGroupId);
 
         if (fetchError) throw fetchError;
 
@@ -274,8 +274,8 @@ function App() {
           }));
 
           const { error: insertError } = await supabase
-            .from('schedules')
-            .insert(newSchedules);
+              .from('schedules')
+              .insert(newSchedules);
 
           if (insertError) throw insertError;
         }
@@ -296,17 +296,17 @@ function App() {
 
     try {
       const { error } = await supabase
-        .from('schedule_groups')
-        .update({ name })
-        .eq('id', id)
-        .eq('user_id', session.user.id);
+          .from('schedule_groups')
+          .update({ name })
+          .eq('id', id)
+          .eq('user_id', session.user.id);
 
       if (error) throw error;
 
       setGroups(
-        groups.map((group) =>
-          group.id === id ? { ...group, name } : group
-        )
+          groups.map((group) =>
+              group.id === id ? { ...group, name } : group
+          )
       );
       setEditingGroupId(null);
       setEditingGroupName('');
@@ -324,10 +324,10 @@ function App() {
 
     try {
       const { error } = await supabase
-        .from('schedule_groups')
-        .delete()
-        .eq('id', id)
-        .eq('user_id', session.user.id);
+          .from('schedule_groups')
+          .delete()
+          .eq('id', id)
+          .eq('user_id', session.user.id);
 
       if (error) throw error;
 
@@ -356,65 +356,65 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar user={session.user} onSignOut={handleSignOut} />
-      
-      <main className="max-w-[1400px] mx-auto px-4 py-8 space-y-8">
-        <ScheduleGroupList
-          groups={groups}
-          selectedGroupId={selectedGroupId}
-          editingGroupId={editingGroupId}
-          editingGroupName={editingGroupName}
-          showNewGroupInput={showNewGroupInput}
-          newGroupName={newGroupName}
-          copyFromGroupId={copyFromGroupId}
-          deleteConfirmGroup={deleteConfirmGroup}
-          onSelectGroup={setSelectedGroupId}
-          onStartEdit={(group) => {
-            setEditingGroupId(group.id);
-            setEditingGroupName(group.name);
-          }}
-          onUpdateGroup={onUpdateGroup}
-          onDeleteGroup={onDeleteGroup}
-          onConfirmDeleteGroup={onConfirmDeleteGroup}
-          onCancelDeleteGroup={() => setDeleteConfirmGroup(null)}
-          onShowNewInput={() => setShowNewGroupInput(true)}
-          onHideNewInput={() => {
-            setShowNewGroupInput(false);
-            setNewGroupName('');
-            setCopyFromGroupId(null);
-          }}
-          onNewNameChange={setNewGroupName}
-          onCreateGroup={onCreateGroup}
-          onEditNameChange={setEditingGroupName}
-          onCancelEdit={() => {
-            setEditingGroupId(null);
-            setEditingGroupName('');
-          }}
-          onCopyFromChange={setCopyFromGroupId}
-        />
+      <div className="min-h-screen bg-gray-50">
+        <Navbar user={session.user} onSignOut={handleSignOut} />
 
-        {selectedGroupId && (
-          <>
-            <ScheduleForm
-              onAddSchedule={onAddSchedule}
-              onUpdateSchedule={onUpdateSchedule}
-              editingSchedule={editingSchedule}
-              onCancelEdit={() => setEditingSchedule(null)}
-            />
+        <main className="max-w-[1400px] mx-auto p-4 space-y-6">
+          <ScheduleGroupList
+              groups={groups}
+              selectedGroupId={selectedGroupId}
+              editingGroupId={editingGroupId}
+              editingGroupName={editingGroupName}
+              showNewGroupInput={showNewGroupInput}
+              newGroupName={newGroupName}
+              copyFromGroupId={copyFromGroupId}
+              deleteConfirmGroup={deleteConfirmGroup}
+              onSelectGroup={setSelectedGroupId}
+              onStartEdit={(group) => {
+                setEditingGroupId(group.id);
+                setEditingGroupName(group.name);
+              }}
+              onUpdateGroup={onUpdateGroup}
+              onDeleteGroup={onDeleteGroup}
+              onConfirmDeleteGroup={onConfirmDeleteGroup}
+              onCancelDeleteGroup={() => setDeleteConfirmGroup(null)}
+              onShowNewInput={() => setShowNewGroupInput(true)}
+              onHideNewInput={() => {
+                setShowNewGroupInput(false);
+                setNewGroupName('');
+                setCopyFromGroupId(null);
+              }}
+              onNewNameChange={setNewGroupName}
+              onCreateGroup={onCreateGroup}
+              onEditNameChange={setEditingGroupName}
+              onCancelEdit={() => {
+                setEditingGroupId(null);
+                setEditingGroupName('');
+              }}
+              onCopyFromChange={setCopyFromGroupId}
+          />
 
-            <ScheduleDisplay
-              schedule={schedule}
-              onDeleteSchedule={onConfirmDeleteSchedule}
-              onEditSchedule={setEditingSchedule}
-              deleteConfirmSchedule={deleteConfirmSchedule}
-              onCancelDelete={() => setDeleteConfirmSchedule(null)}
-              onConfirmDelete={(id) => onDeleteSchedule(id)}
-            />
-          </>
-        )}
-      </main>
-    </div>
+          {selectedGroupId && (
+              <>
+                <ScheduleForm
+                    onAddSchedule={onAddSchedule}
+                    onUpdateSchedule={onUpdateSchedule}
+                    editingSchedule={editingSchedule}
+                    onCancelEdit={() => setEditingSchedule(null)}
+                />
+
+                <ScheduleDisplay
+                    schedule={schedule}
+                    onDeleteSchedule={onConfirmDeleteSchedule}
+                    onEditSchedule={setEditingSchedule}
+                    deleteConfirmSchedule={deleteConfirmSchedule}
+                    onCancelDelete={() => setDeleteConfirmSchedule(null)}
+                    onConfirmDelete={(id) => onDeleteSchedule(id)}
+                />
+              </>
+          )}
+        </main>
+      </div>
   );
 }
 

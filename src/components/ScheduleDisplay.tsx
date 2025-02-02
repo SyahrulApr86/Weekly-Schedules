@@ -12,6 +12,7 @@ interface ScheduleDisplayProps {
   onConfirmDelete: (id: string) => void;
 }
 
+// Generate time slots for the schedule
 const timeSlots = Array.from({ length: 24 }, (_, i) =>
     `${i.toString().padStart(2, '0')}:00`
 );
@@ -196,16 +197,14 @@ export function ScheduleDisplay({
       : timeSlots;
 
   return (
-      <div className="bg-white rounded-2xl shadow-sm p-6">
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center gap-4">
-            <h2 className="text-2xl font-semibold text-gray-800 flex items-center gap-2">
-              <span>Weekly Timetable</span>
-              <span className="text-sm font-normal text-gray-500">(Scroll horizontally to view full schedule)</span>
-            </h2>
+      <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">Weekly Timetable</h2>
+            <p className="text-sm font-normal text-gray-500">(Scroll to view full schedule)</p>
             <button
                 onClick={() => setIsMinimized(!isMinimized)}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors font-medium"
+                className="flex items-center gap-2 px-4 py-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors font-medium w-full sm:w-auto justify-center"
             >
               {isMinimized ? (
                   <>
@@ -222,7 +221,7 @@ export function ScheduleDisplay({
           </div>
           <button
               onClick={exportToImage}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium w-full sm:w-auto justify-center"
           >
             <Download className="w-4 h-4" />
             Export Schedule

@@ -8,6 +8,16 @@
     cursor: pointer;
     padding-right: 30px !important; /* Space for the dropdown arrow */
   }
+
+  /* Improve table responsiveness */
+  @media (max-width: 640px) {
+    table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
 }
 
 @layer utilities {
