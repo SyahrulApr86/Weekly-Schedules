@@ -12,7 +12,6 @@ export interface ScheduleItem {
 export interface ScheduleGroup {
   id: string;
   name: string;
-  isDefault: boolean;
   createdAt: string;
 }
 

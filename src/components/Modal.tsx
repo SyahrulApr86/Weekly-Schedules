@@ -20,14 +20,14 @@ export function Modal({ isOpen, onClose, children }: ModalProps) {
         />
         
         {/* Modal panel */}
-        <div className="relative bg-white rounded-xl shadow-xl transform transition-all w-full max-w-lg">
+        <div className="relative bg-white rounded-xl shadow-xl transform transition-all w-full max-w-4xl p-8">
           <button
             onClick={onClose}
-            className="absolute right-4 top-4 text-gray-400 hover:text-gray-500"
+            className="absolute right-6 top-6 text-gray-400 hover:text-gray-500"
           >
-            <X className="w-5 h-5" />
+            <X className="w-6 h-6" />
           </button>
-          <div className="p-6">
+          <div className="mt-2">
             {children}
           </div>
         </div>
